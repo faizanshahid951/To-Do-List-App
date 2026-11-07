@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskMaster - Python To-Do List App</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-100">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">To-Do List</h1>
+          <p class="text-xs text-slate-500">Fast, local & persistent task manager</p>
+        </div>
+      </div>
+      
+      <!-- Stats Badges -->
+      <div class="hidden sm:flex items-center gap-2 text-xs font-medium">
+        <div class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700">
+          Total: <span id="statTotal" class="font-bold text-slate-900">0</span>
+        </div>
+        <div class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+          Active: <span id="statActive" class="font-bold">0</span>
+        </div>
+        <div class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+          Completed: <span id="statCompleted" class="font-bold">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- Add Task Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 mb-8">
+      <h2 class="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Add New Task
+      </h2>
+      <form id="taskForm" class="space-y-4">
+        <div>
+          <input 
+            type="text" 
+            id="taskTitle" 
+            placeholder="What needs to be done? (e.g., Complete Python report)" 
+            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm placeholder:text-slate-400 font-medium transition" 
+            required
+          >
+        </div>
+        <div>
+          <textarea 
+            id="taskDescription" 
+            rows="2" 
+            placeholder="Add optional notes or details..." 
+            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm placeholder:text-slate-400 transition"
+          ></textarea>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Priority</label>
+            <select id="taskPriority" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+              <option value="Low">Low Priority</option>
+              <option value="Medium" selected>Medium Priority</option>
+              <option value="High">High Priority</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
+            <input 
+              type="text" 
+              id="taskCategory" 
+              placeholder="e.g. Work, Study" 
+              list="categoryDatalist"
+              class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+            <datalist id="categoryDatalist">
+              <option value="Work">
+              <option value="Personal">
+              <option value="Study">
+              <option value="Shopping">
+            </datalist>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Due Date</label>
+            <input 
+              type="date" 
+              id="taskDueDate" 
+              class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            >
+          </div>
+        </div>
+        <div class="flex justify-end pt-2">
+          <button 
+            type="submit" 
+            class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm transition shadow-sm shadow-indigo-200 flex items-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Task
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Controls & Filters Bar -->
+    <div class="space-y-4 mb-6">
+      <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search tasks..." 
+            class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+        </div>
+
+        <!-- Sort dropdown -->
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-medium text-slate-500 whitespace-nowrap">Sort by:</label>
+          <select id="sortSelect" class="px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="created_desc">Newest First</option>
+            <option value="created_asc">Oldest First</option>
+            <option value="due_date">Due Date</option>
+            <option value="priority">Priority</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Filter tabs & options -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <!-- Status Tabs -->
+        <div class="inline-flex rounded-xl bg-slate-200/60 p-1 text-xs font-medium">
+          <button data-filter="all" class="filter-btn px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition">All</button>
+          <button data-filter="active" class="filter-btn px-3 py-1.5 rounded-lg bg-transparent text-slate-600 hover:text-slate-900 transition">Active</button>
+          <button data-filter="completed" class="filter-btn px-3 py-1.5 rounded-lg bg-transparent text-slate-600 hover:text-slate-900 transition">Completed</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Category dropdown filter -->
+          <select id="categoryFilter" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="all">All Categories</option>
+          </select>
+
+          <!-- Priority dropdown filter -->
+          <select id="priorityFilter" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="all">All Priorities</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+
+          <!-- Clear Completed Button -->
+          <button 
+            id="clearCompletedBtn" 
+            class="text-xs text-rose-600 hover:text-rose-700 font-medium px-2 py-1.5 rounded-lg hover:bg-rose-50 transition"
+          >
+            Clear Completed
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div id="taskList" class="space-y-3">
+      <!-- Injected by JavaScript -->
+    </div>
+  </main>
+
+  <!-- Edit Task Modal -->
+  <div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-slate-800">Edit Task</h3>
+        <button id="cancelEditBtn" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="editForm" class="space-y-4">
+        <input type="hidden" id="editId">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Title</label>
+          <input type="text" id="editTitle" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Description</label>
+          <textarea id="editDescription" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Priority</label>
+            <select id="editPriority" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
+            <input type="text" id="editCategory" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Due Date</label>
+            <input type="date" id="editDueDate" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-4">
+          <button type="button" onclick="document.getElementById('editModal').classList.add('hidden')" class="px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

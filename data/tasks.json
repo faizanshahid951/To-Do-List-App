@@ -1,0 +1,32 @@
+[
+  {
+    "id": "148f0e91-ecb5-4dfc-843f-f2ed3a2c874a",
+    "title": "Complete Python To-Do project setup",
+    "description": "Verify backend API, frontend dashboard, and JSON file persistence",
+    "completed": false,
+    "priority": "High",
+    "category": "Development",
+    "due_date": "2026-11-06",
+    "created_at": "2026-11-05T11:45:49.931436"
+  },
+  {
+    "id": "f7e3bb4e-54ea-4420-89a0-760b4a7e2cbd",
+    "title": "Grocery shopping",
+    "description": "Apples, milk, whole wheat bread, coffee",
+    "completed": false,
+    "priority": "Medium",
+    "category": "Personal",
+    "due_date": "2026-11-08",
+    "created_at": "2026-11-05T11:45:49.931735"
+  },
+  {
+    "id": "0c15b4eb-4e8d-451b-900d-e52d09b0a48b",
+    "title": "report file",
+    "description": "add everything",
+    "completed": false,
+    "priority": "High",
+    "category": "Work",
+    "due_date": "2026-11-02",
+    "created_at": "2026-11-05T11:54:00.463190"
+  }
+]
